@@ -1,8 +1,8 @@
 package com.infobeans.lms.config
 
 import com.infobeans.lms.exceptions.JWTExpiredException
-import com.infobeans.lms.service.CustomUserDetailsService
-import com.infobeans.lms.service.JwtService
+import com.infobeans.lms.service.impl.CustomUserDetailsService
+import com.infobeans.lms.service.impl.JwtService
 import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

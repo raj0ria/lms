@@ -1,7 +1,7 @@
 package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.UpdateModuleProgressRequest
-import com.infobeans.lms.service.ModuleProgressService
+import com.infobeans.lms.service.impl.ModuleProgressService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PatchMapping

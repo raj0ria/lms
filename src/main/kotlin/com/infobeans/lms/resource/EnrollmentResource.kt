@@ -1,7 +1,7 @@
 package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.EnrollmentResponse
-import com.infobeans.lms.service.EnrollmentService
+import com.infobeans.lms.service.impl.EnrollmentService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

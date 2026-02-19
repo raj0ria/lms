@@ -4,7 +4,7 @@ import com.infobeans.lms.dto.CreateCourseRequest
 import com.infobeans.lms.dto.CourseResponse
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.UpdateCourseRequest
-import com.infobeans.lms.service.InstructorCourseService
+import com.infobeans.lms.service.impl.InstructorCourseService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable

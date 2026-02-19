@@ -2,7 +2,7 @@ package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.StudentCourseDashboardResponse
-import com.infobeans.lms.service.StudentDashboardService
+import com.infobeans.lms.service.impl.StudentDashboardService
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
