@@ -1,4 +1,4 @@
-package com.infobeans.lms.service
+package com.infobeans.lms.service.impl
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

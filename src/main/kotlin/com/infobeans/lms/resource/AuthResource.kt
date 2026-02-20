@@ -7,7 +7,7 @@ import com.infobeans.lms.dto.RegisterUserRequest
 import com.infobeans.lms.enums.Role
 import com.infobeans.lms.model.User
 import com.infobeans.lms.persistence.UserRepository
-import com.infobeans.lms.service.JwtService
+import com.infobeans.lms.service.impl.JwtService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus

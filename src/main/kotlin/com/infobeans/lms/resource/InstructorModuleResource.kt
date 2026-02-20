@@ -4,7 +4,7 @@ import com.infobeans.lms.dto.CreateModuleRequest
 import com.infobeans.lms.dto.ModuleResponse
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.UpdateModuleRequest
-import com.infobeans.lms.service.InstructorModuleService
+import com.infobeans.lms.service.impl.InstructorModuleService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable

@@ -1,4 +1,4 @@
-package com.infobeans.lms.service
+package com.infobeans.lms.service.impl
 
 import com.infobeans.lms.dto.AdminCourseResponse
 import com.infobeans.lms.dto.PagedResponse

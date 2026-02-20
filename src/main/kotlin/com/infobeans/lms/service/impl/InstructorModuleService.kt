@@ -1,4 +1,4 @@
-package com.infobeans.lms.service
+package com.infobeans.lms.service.impl
 
 import com.infobeans.lms.dto.CreateModuleRequest
 import com.infobeans.lms.dto.ModuleResponse

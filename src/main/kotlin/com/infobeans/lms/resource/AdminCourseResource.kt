@@ -2,7 +2,7 @@ package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.AdminCourseResponse
 import com.infobeans.lms.dto.PagedResponse
-import com.infobeans.lms.service.AdminCourseService
+import com.infobeans.lms.service.impl.AdminCourseService
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault

@@ -3,7 +3,7 @@ package com.infobeans.lms.resource
 import com.infobeans.lms.dto.ChangePasswordRequest
 import com.infobeans.lms.dto.UpdateProfileRequest
 import com.infobeans.lms.dto.UserProfileResponse
-import com.infobeans.lms.service.UserProfileService
+import com.infobeans.lms.service.impl.UserProfileService
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
+ * Profile Management
+ * User Self APIs
  * REST resource exposing authenticated user profile APIs.
  */
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/users/me")
 @PreAuthorize("isAuthenticated()")
 class UserProfileResource(
     private val userProfileService: UserProfileService
@@ -30,7 +32,7 @@ class UserProfileResource(
     /**
      * Returns current user's profile.
      */
-    @GetMapping("/me")
+    @GetMapping
     fun getProfile(): ResponseEntity<UserProfileResponse> {
 
         log.info("GET /api/v1/users/me invoked")
@@ -41,7 +43,7 @@ class UserProfileResource(
     /**
      * Updates current user's profile.
      */
-    @PutMapping("/me")
+    @PutMapping
     fun updateProfile(
         @Valid @RequestBody request: UpdateProfileRequest
     ): ResponseEntity<UserProfileResponse> {
@@ -54,7 +56,7 @@ class UserProfileResource(
     /**
      * Changes current user's password.
      */
-    @PatchMapping("/me/password")
+    @PatchMapping("/password")
     fun changePassword(
         @Valid @RequestBody request: ChangePasswordRequest
     ): ResponseEntity<Void> {

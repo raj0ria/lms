@@ -4,7 +4,7 @@ import com.infobeans.lms.dto.CreateUserRequest
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.UpdateUserRequest
 import com.infobeans.lms.dto.UserAdminResponse
-import com.infobeans.lms.service.UserAdminService
+import com.infobeans.lms.service.impl.UserAdminService
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

@@ -3,7 +3,7 @@ package com.infobeans.lms.resource
 import com.infobeans.lms.dto.CourseDetailResponse
 import com.infobeans.lms.dto.CourseSearchResponse
 import com.infobeans.lms.dto.PagedResponse
-import com.infobeans.lms.service.CourseDiscoveryService
+import com.infobeans.lms.service.impl.CourseDiscoveryService
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort

@@ -1,4 +1,4 @@
-package com.infobeans.lms.service
+package com.infobeans.lms.service.impl
 
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.StudentCourseDashboardResponse
@@ -8,7 +8,6 @@ import com.infobeans.lms.persistence.EnrollmentRepository
 import com.infobeans.lms.persistence.UserRepository
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
