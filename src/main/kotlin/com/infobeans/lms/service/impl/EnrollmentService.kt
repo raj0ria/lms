@@ -18,6 +18,19 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
+/**
+ * Service responsible for enrollment business logic.
+ *
+ * Responsibilities:
+ * - Enroll student in course
+ * - Validate business constraints
+ * - Enforce RBAC at business layer
+ * - Initialize module progress tracking
+ * - Support observability via logging & metrics
+ *
+ * Layer: Service (Business Logic)
+ */
+
 @Service
 class EnrollmentService(
     private val enrollmentRepository: EnrollmentRepository,
@@ -28,28 +41,56 @@ class EnrollmentService(
 
     private val log = LoggerFactory.getLogger(EnrollmentService::class.java)
 
+    /**
+     * Micrometer counter to track enrollment events.
+     * Exposed via Act  uator /metrics endpoint.
+     */
     private val enrollmentCount = meterRegistry.counter("enrollment_count")
 
+    /**
+     * Enrolls authenticated student into a course.
+     *
+     * Business Rules:
+     * - User must exist
+     * - User must have STUDENT role
+     * - Course must exist
+     * - Course must be published
+     * - Duplicate enrollment must not occur
+     * - Course capacity must not be exceeded
+     *
+     * Also:
+     * - Initializes module completion tracking
+     * - Increments enrollment metric counter
+     *
+     * @param courseId ID of the course
+     * @return EnrollmentResponse
+     */
     @Transactional
     fun enrollInCourse(courseId: Long): EnrollmentResponse {
 
+        // Increment enrollment metric for observability
         enrollmentCount.increment()
 
+        // Extract authenticated user's email from security context
         val email = SecurityContextHolder.getContext()
             .authentication.name
 
         log.info("User {} attempting to enroll in course {}", email, courseId)
 
+        // Validate student existence
         val student = userRepository.findByEmail(email)
             ?: throw ResourceNotFoundException("User not found")
 
+        // RBAC enforcement at service layer
         if (student.role != Role.STUDENT) {
             throw AccessDeniedException("Only students are allowed to enroll")
         }
 
+        // Validate course existence
         val course = courseRepository.findById(courseId)
             .orElseThrow { ResourceNotFoundException("Course not found") }
 
+        // Ensure course is published before enrollment
         if (!course.published) {
             throw BusinessRuleViolationException("Course is not published")
         }
@@ -67,6 +108,10 @@ class EnrollmentService(
         enrollment.user = student
         enrollment.course = course
 
+        /**
+         * Initialize module progress tracking.
+         * Each module starts with NOT_STARTED status.
+         */
         course.modules.forEach { module ->
             val status = StudentEnrollmentStatus(
                 status = EnrollmentStatus.NOT_STARTED
@@ -119,6 +164,9 @@ class EnrollmentService(
         )
     }
 
+    /**
+     * Maps Enrollment entity to EnrollmentResponse DTO.
+     */
     private fun Enrollment.toResponse(): EnrollmentResponse {
         return EnrollmentResponse(
             id = this.id,

@@ -18,6 +18,10 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+/**
+ * Service for managing course modules by instructors.
+ * Handles module creation, update, delete and listing.
+ */
 @Service
 class InstructorModuleService(
     private val courseRepository: CourseRepository,
@@ -28,8 +32,7 @@ class InstructorModuleService(
     private val log = LoggerFactory.getLogger(InstructorModuleService::class.java)
 
     /**
-     * Role: Instructor
-     * Create a course module using course id and module data
+     * Create module under instructor's course.
      */
     @Transactional
     fun createModule(courseId: Long, request: CreateModuleRequest): ModuleResponse {
@@ -177,6 +180,9 @@ class InstructorModuleService(
         log.info("Module {} deleted successfully", moduleId)
     }
 
+    /**
+     * Maps Module entity to ModuleResponse DTO.
+     */
     private fun Module.toResponse(): ModuleResponse {
         return ModuleResponse(
             id = this.id,

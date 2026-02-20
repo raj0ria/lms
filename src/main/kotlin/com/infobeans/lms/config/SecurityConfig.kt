@@ -15,6 +15,17 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
+/**
+ * Spring Security configuration for LMS application.
+ *
+ * Features:
+ * - Stateless JWT authentication
+ * - Role-based access control (RBAC)
+ * - CORS configuration
+ * - Disabled form login & basic auth
+ *
+ * Enforces security rules defined in LMS requirements.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -22,6 +33,9 @@ class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter
 ) {
 
+    /**
+     * Configures CORS policy for Angular frontend.
+     */
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
@@ -61,6 +75,9 @@ class SecurityConfig(
         return http.build()
     }
 
+    /**
+     * Password encoder bean using BCrypt hashing algorithm.
+     */
     @Bean
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()

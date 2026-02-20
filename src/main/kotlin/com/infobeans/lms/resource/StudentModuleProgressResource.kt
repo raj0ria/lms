@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+
+/**
+ * Controller for student module progress updates.
+ */
 @RestController
 @RequestMapping("/api/v1/modules")
 class StudentModuleProgressResource(
     private val moduleProgressService: ModuleProgressService
 ) {
-
+    /**
+     * Update progress status of a module for logged-in student.
+     */
     @PreAuthorize("hasRole('STUDENT')")
     @PatchMapping("/{moduleId}/progress")
     fun updateModuleProgress(

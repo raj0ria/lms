@@ -8,6 +8,14 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.*
 
+/**
+ * Filter responsible for correlation ID propagation.
+ *
+ * Purpose:
+ * - Adds correlation ID to each request
+ * - Enables traceability in logs
+ * - Supports observability requirements
+ */
 @Component
 class CorrelationIdFilter : OncePerRequestFilter() {
 

@@ -16,7 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 /**
- * REST resource for instructor course management.
+ * Instructor Course Controller.
+ * Handles course CRUD operations for authenticated instructors.
  */
 @RestController
 @RequestMapping("/api/v1/instructor/courses")
@@ -27,6 +28,9 @@ class InstructorCourseResource(
 
     private val log = LoggerFactory.getLogger(InstructorCourseResource::class.java)
 
+    /**
+     * Create a new course.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createCourse(
@@ -36,6 +40,9 @@ class InstructorCourseResource(
         return courseService.createCourse(request)
     }
 
+    /**
+     * Update existing course.
+     */
     @PutMapping("/{courseId}")
     fun updateCourse(
         @PathVariable courseId: Long,
@@ -47,6 +54,9 @@ class InstructorCourseResource(
         return courseService.updateCourse(courseId, request)
     }
 
+    /**
+     * Delete a course.
+     */
     @DeleteMapping("/{courseId}")
     fun deleteCourse(
         @PathVariable courseId: Long
@@ -59,6 +69,9 @@ class InstructorCourseResource(
         return ResponseEntity.noContent().build()
     }
 
+    /**
+     * Publish a course (make visible to students).
+     */
     @PatchMapping("/{courseId}/publish")
     fun publishCourse(
         @PathVariable courseId: Long
@@ -69,6 +82,9 @@ class InstructorCourseResource(
         return courseService.publishCourse(courseId)
     }
 
+    /**
+     * Get paginated list of instructor's own courses.
+     */
     @GetMapping
     fun getOwnCourses(
         @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC)
