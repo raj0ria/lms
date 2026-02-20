@@ -40,7 +40,7 @@ class SecurityConfig(
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
         config.allowedOrigins = listOf("http://localhost:4200", "https://lms-frontend-latest.onrender.com")
-        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
+        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         config.allowedHeaders = listOf("*")
         config.allowCredentials = true
 
