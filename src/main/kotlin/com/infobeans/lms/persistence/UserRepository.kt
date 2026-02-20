@@ -1,5 +1,6 @@
 package com.infobeans.lms.persistence
 
+import com.infobeans.lms.dto.projections.AdminDashboardSummaryProjection
 import com.infobeans.lms.dto.projections.UserAdminProjection
 import com.infobeans.lms.model.User
 import org.springframework.data.domain.Page
@@ -66,4 +67,17 @@ interface UserRepository: JpaRepository<User, Long> {
         keyword: String?,
         pageable: Pageable
     ): Page<UserAdminProjection>
+
+
+    @Query(
+        value = """
+        select 
+            (select count(*) from users where role = 'STUDENT') as totalStudents,
+            (select count(*) from users where role = 'INSTRUCTOR') as totalInstructors,
+            (select count(*) from courses) as totalCourses,
+            (select count(*) from enrollments) as totalEnrollments
+    """,
+        nativeQuery = true
+    )
+    fun fetchDashboardSummary(): AdminDashboardSummaryProjection
 }
