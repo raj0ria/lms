@@ -56,6 +56,11 @@ class SecurityConfig(
             .csrf { it.disable() }
             .headers { headers -> headers.frameOptions { it.disable() } }
             .authorizeHttpRequests {
+                it.requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 it.requestMatchers("/api/auth/**", "/actuator/**").permitAll()
                 it.requestMatchers("/h2/**").permitAll()
                 it.requestMatchers("/api/admin/**")

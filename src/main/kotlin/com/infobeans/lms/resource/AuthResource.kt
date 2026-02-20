@@ -8,6 +8,12 @@ import com.infobeans.lms.enums.Role
 import com.infobeans.lms.model.User
 import com.infobeans.lms.persistence.UserRepository
 import com.infobeans.lms.service.impl.JwtService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -36,8 +42,13 @@ import org.springframework.web.server.ResponseStatusException
  *
  * Base Path: /api/auth
  */
+@Tag(
+    name = "Authentication",
+    description = "Handles registration, login, token refresh and logout for LMS"
+)
 @RestController
 @RequestMapping("/api/auth")
+
 class AuthResource(
     private val userRepository: UserRepository,
     private val encoder: PasswordEncoder,
@@ -57,6 +68,21 @@ class AuthResource(
      * @param response HTTP response to attach refresh cookie
      * @return AuthResponse containing access token and role
      */
+    @Operation(
+        summary = "Login user",
+        description = "Authenticates user credentials and returns access token. Refresh token is stored in HttpOnly cookie."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Login successful",
+                content = [Content(schema = Schema(implementation = AuthResponse::class))]
+            ),
+            ApiResponse(responseCode = "400", description = "Invalid request"),
+            ApiResponse(responseCode = "401", description = "Invalid email or password")
+        ]
+    )
     @PostMapping("/login")
     fun login(@RequestBody request: AuthRequest,
               response: HttpServletResponse) : AuthResponse {
@@ -96,6 +122,20 @@ class AuthResource(
      * @param response HTTP response to attach new refresh cookie
      * @return new AuthResponse with fresh access token
      */
+    @Operation(
+        summary = "Refresh access token",
+        description = "Generates a new access token using refresh token from HttpOnly cookie. Also rotates refresh token."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Token refreshed successfully",
+                content = [Content(schema = Schema(implementation = AuthResponse::class))]
+            ),
+            ApiResponse(responseCode = "401", description = "Invalid or missing refresh token")
+        ]
+    )
     @PostMapping("/refresh")
     fun refresh(request: HttpServletRequest,
                 response: HttpServletResponse): AuthResponse{
@@ -134,6 +174,15 @@ class AuthResource(
      *
      * @param response HTTP response
      */
+    @Operation(
+        summary = "Logout user",
+        description = "Deletes refresh token cookie. Stateless logout."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Logout successful")
+        ]
+    )
     @PostMapping("/logout")
     fun logout(response: HttpServletResponse){
         jwtService.deleteRefreshTokenCookie(response)
@@ -151,6 +200,21 @@ class AuthResource(
      * @param request registration details
      * @return ResponseEntity with success message
      */
+    @Operation(
+        summary = "Register new user",
+        description = "Creates a new user. Default role is STUDENT if not provided."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201",
+                description = "User registered successfully",
+                content = [Content(schema = Schema(implementation = RegisterResponse::class))]
+            ),
+            ApiResponse(responseCode = "400", description = "Invalid input"),
+            ApiResponse(responseCode = "409", description = "Email already exists")
+        ]
+    )
     @PostMapping("/register")
     fun register(@RequestBody request: RegisterUserRequest): ResponseEntity<RegisterResponse>{
 
