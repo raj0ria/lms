@@ -12,6 +12,18 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
+/**
+ * Custom JWT authentication filter.
+ *
+ * Responsibilities:
+ * - Intercepts incoming requests
+ * - Extracts Bearer token
+ * - Validates JWT
+ * - Loads user details
+ * - Sets authentication in SecurityContext
+ *
+ * Executes once per request.
+ */
 @Component
 class JwtAuthFilter(
     private val jwtService: JwtService,
@@ -24,6 +36,8 @@ class JwtAuthFilter(
     ) {
        val header = request.getHeader("Authorization")
         var email = ""
+
+        // Check if Authorization header contains Bearer token
         if(header != null && header.startsWith("Bearer ")){
             val token = header.substring(7)
             try {

@@ -14,6 +14,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
+/**
+ * Instructor Module Controller.
+ * Handles module management within instructor-owned courses.
+ */
 @RestController
 @RequestMapping("/api/v1/instructor")
 @PreAuthorize("hasRole('INSTRUCTOR')")
@@ -23,6 +27,9 @@ class InstructorModuleResource(
 
     private val log = LoggerFactory.getLogger(InstructorModuleResource::class.java)
 
+    /**
+     * Create a module under a course.
+     */
     @PostMapping("/courses/{courseId}/modules")
     fun createModule(
         @PathVariable courseId: Long,
@@ -34,6 +41,9 @@ class InstructorModuleResource(
         return moduleService.createModule(courseId, request)
     }
 
+    /**
+     * Update existing module.
+     */
     @PutMapping("/modules/{moduleId}")
     fun updateModule(
         @PathVariable moduleId: Long,
@@ -45,6 +55,9 @@ class InstructorModuleResource(
         return moduleService.updateModule(moduleId, request)
     }
 
+    /**
+     * Delete a module.
+     */
     @DeleteMapping("/modules/{moduleId}")
     fun deleteModule(
         @PathVariable moduleId: Long
@@ -57,6 +70,9 @@ class InstructorModuleResource(
         return ResponseEntity.noContent().build()
     }
 
+    /**
+     * Get paginated modules for a course.
+     */
     @GetMapping("/courses/{courseId}/modules")
     fun getModules(
         @PathVariable courseId: Long,

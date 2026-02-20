@@ -18,6 +18,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
+/**
+ * Service for instructor course management.
+ * Handles course creation, update, publish, delete and listing.
+ */
 @Service
 class InstructorCourseService(
     private val courseRepository: CourseRepository,
@@ -26,6 +30,9 @@ class InstructorCourseService(
 
     private val log = LoggerFactory.getLogger(InstructorCourseService::class.java)
 
+    /**
+     * Create new course for authenticated instructor.
+     */
     @Transactional
     fun createCourse(request: CreateCourseRequest): CourseResponse {
 
@@ -63,6 +70,9 @@ class InstructorCourseService(
         return savedCourse.toResponse()
     }
 
+    /**
+     * Publish instructor's own course.
+     */
     @Transactional
     fun publishCourse(courseId: Long): CourseResponse {
 
@@ -99,7 +109,7 @@ class InstructorCourseService(
     }
 
     /**
-     * Returns paginated list of courses owned by instructor.
+     * Get paginated list of instructor's own courses.
      */
     @Transactional(readOnly = true)
     fun getInstructorCourses(pageable: Pageable): PagedResponse<CourseResponse> {
@@ -137,7 +147,7 @@ class InstructorCourseService(
     }
 
     /**
-     * Updates course owned by instructor.
+     * Update instructor's own course.
      */
     @Transactional
     fun updateCourse(courseId: Long, request: UpdateCourseRequest): CourseResponse {
@@ -170,7 +180,7 @@ class InstructorCourseService(
     }
 
     /**
-     * Deletes course owned by instructor.
+     * Delete instructor's own course.
      */
     @Transactional
     fun deleteCourse(courseId: Long) {
@@ -192,7 +202,9 @@ class InstructorCourseService(
         log.info("Course {} deleted successfully by instructor {}", courseId, email)
     }
 
-
+    /**
+     * Maps Course entity to CourseResponse DTO.
+     */
     private fun Course.toResponse(): CourseResponse {
         return CourseResponse(
             id = this.id,

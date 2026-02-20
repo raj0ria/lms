@@ -14,6 +14,9 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
+/**
+ * Service for managing student module progress.
+ */
 @Service
 class ModuleProgressService(
     private val statusRepository: StudentEnrollmentStatusRepository,
@@ -23,6 +26,9 @@ class ModuleProgressService(
 
     private val log = LoggerFactory.getLogger(ModuleProgressService::class.java)
 
+    /**
+     * Update module progress status for authenticated student.
+     */
     @Transactional
     fun updateProgress(
         moduleId: Long,

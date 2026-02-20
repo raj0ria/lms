@@ -7,9 +7,40 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
+/**
+ * Repository for managing User entities.
+ *
+ * Responsibilities:
+ * - Fetch users by email (unique index enforced)
+ * - Provide paginated & filtered search for admin panel
+ *
+ * Layer: Repository (JPA)
+ */
+
+
 interface UserRepository: JpaRepository<User, Long> {
+
+    /**
+     * Finds user by unique email.
+     *
+     * @param email user email
+     * @return User or null if not found
+     */
     fun findByEmail(email: String): User?
 
+
+    /**
+     * Searches users by keyword (name or email).
+     *
+     * Supports:
+     * - Pagination
+     * - Case-insensitive filtering
+     * - Admin panel usage
+     *
+     * @param keyword optional search keyword
+     * @param pageable pagination configuration
+     * @return paginated projection of users
+     */
     @Query(
         value = """
             select 

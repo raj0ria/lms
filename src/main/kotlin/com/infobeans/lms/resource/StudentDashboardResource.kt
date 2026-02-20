@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * Student Dashboard Controller.
+ * Provides enrolled courses with progress details.
+ */
 @RestController
 @RequestMapping("/api/v1/students")
 class StudentDashboardResource(
@@ -21,6 +25,9 @@ class StudentDashboardResource(
 
     private val log = LoggerFactory.getLogger(StudentDashboardResource::class.java)
 
+    /**
+     * Get paginated list of logged-in student's enrolled courses.
+     */
     @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/me/courses")
     fun getMyCourses(

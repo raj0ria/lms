@@ -14,7 +14,10 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
-
+/**
+ * Service for student dashboard.
+ * Returns enrolled courses with progress calculation.
+ */
 @Service
 class StudentDashboardService(
     private val enrollmentRepository: EnrollmentRepository,
@@ -23,6 +26,9 @@ class StudentDashboardService(
 
     private val log = LoggerFactory.getLogger(StudentDashboardService::class.java)
 
+    /**
+     * Fetch enrolled courses of authenticated student.
+     */
     @Transactional
     fun getMyCourses(pageable: Pageable): PagedResponse<StudentCourseDashboardResponse> {
 
@@ -54,6 +60,7 @@ class StudentDashboardService(
 
         val page = enrollmentRepository.findStudentDashboard(student.id, pageable)
 
+        // Map response and calculate progress %
         val mappedContent = page.content.map {
             val progress =
                 if (it.totalModules == 0L) 0
