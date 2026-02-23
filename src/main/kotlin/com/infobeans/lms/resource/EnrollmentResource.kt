@@ -5,9 +5,7 @@ import com.infobeans.lms.dto.EnrollmentResponse
 import com.infobeans.lms.dto.StudentModuleProgressResponse
 import com.infobeans.lms.persistence.UserRepository
 import com.infobeans.lms.service.impl.EnrollmentService
-<<<<<<< HEAD
 import com.infobeans.lms.service.impl.ModuleProgressService
-=======
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.ParameterIn
@@ -17,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
->>>>>>> 9d84a80e150262bc22d25acd1c4c33d5ad70433d
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

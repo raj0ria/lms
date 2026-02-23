@@ -52,11 +52,7 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-<<<<<<< HEAD
-            .cors { }
-=======
             .cors{}
->>>>>>> 9d84a80e150262bc22d25acd1c4c33d5ad70433d
             .csrf { it.disable() }
             .headers { headers -> headers.frameOptions { it.disable() } }
             .authorizeHttpRequests {

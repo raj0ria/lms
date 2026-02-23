@@ -1,31 +1,19 @@
 package com.infobeans.lms.resource
 
-<<<<<<< HEAD
-import com.infobeans.lms.dto.StudentModuleProgressResponse
-=======
 import com.infobeans.lms.dto.ApiError
+import com.infobeans.lms.dto.UpdateModuleProgressRequest
+import com.infobeans.lms.service.impl.ModuleProgressService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
-
->>>>>>> 9d84a80e150262bc22d25acd1c4c33d5ad70433d
-import com.infobeans.lms.dto.UpdateModuleProgressRequest
-import com.infobeans.lms.persistence.UserRepository
-import com.infobeans.lms.service.impl.ModuleProgressService
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.Authentication
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 /**
