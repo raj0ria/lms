@@ -39,8 +39,8 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration()
-        config.allowedOrigins = listOf("http://localhost:4200")
-        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
+        config.allowedOrigins = listOf("http://localhost:4200", "https://lms-frontend-latest.onrender.com")
+        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
         config.allowedHeaders = listOf("*")
         config.allowCredentials = true
 
@@ -52,10 +52,19 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+<<<<<<< HEAD
             .cors { }
+=======
+            .cors{}
+>>>>>>> 9d84a80e150262bc22d25acd1c4c33d5ad70433d
             .csrf { it.disable() }
             .headers { headers -> headers.frameOptions { it.disable() } }
             .authorizeHttpRequests {
+                it.requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 it.requestMatchers("/api/auth/**", "/actuator/**").permitAll()
                 it.requestMatchers("/h2/**").permitAll()
                 it.requestMatchers("/api/admin/**")

@@ -3,6 +3,11 @@ package com.infobeans.lms.resource
 import com.infobeans.lms.dto.AdminCourseResponse
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.service.impl.AdminCourseService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -21,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/admin/courses")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Admin Course Management", description = "Endpoints for managing all courses by admin")
+@SecurityRequirement(name = "BearerAuth")
 class AdminCourseResource(
     private val adminCourseService: AdminCourseService
 ) {
@@ -30,6 +37,20 @@ class AdminCourseResource(
     /**
      * Returns paginated list of all courses (published & unpublished).
      */
+    /**
+     * Returns paginated list of all courses (published & unpublished).
+     */
+    @Operation(
+        summary = "Get all courses (Admin)",
+        description = "Returns paginated list of all courses including published and unpublished."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Courses retrieved successfully"),
+            ApiResponse(responseCode = "401", description = "Unauthorized"),
+            ApiResponse(responseCode = "403", description = "Access denied")
+        ]
+    )
     @GetMapping
     fun getAllCourses(
         @RequestParam(required = false) keyword: String?,
@@ -47,6 +68,21 @@ class AdminCourseResource(
     /**
      * Deletes a course by ID.
      */
+    /**
+     * Deletes a course by ID.
+     */
+    @Operation(
+        summary = "Delete course (Admin)",
+        description = "Deletes a course permanently by its ID."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Course deleted successfully"),
+            ApiResponse(responseCode = "404", description = "Course not found"),
+            ApiResponse(responseCode = "401", description = "Unauthorized"),
+            ApiResponse(responseCode = "403", description = "Access denied")
+        ]
+    )
     @DeleteMapping("/{courseId}")
     fun deleteCourse(
         @PathVariable courseId: Long

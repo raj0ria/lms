@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -74,6 +75,13 @@ class GlobalExceptionHandler {
 
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
+
+    // 🔥 ADD THIS (Spring 6 method security)
+    @ExceptionHandler(AuthorizationDeniedException::class)
+    fun handleAuthorizationDenied(
+        ex: AuthorizationDeniedException,
+        request: HttpServletRequest
+    ) = buildError(ex, HttpStatus.FORBIDDEN, request)
 
     @ExceptionHandler(JWTExpiredException::class)
     fun handleJwtExpired(

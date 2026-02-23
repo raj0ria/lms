@@ -1,11 +1,22 @@
 package com.infobeans.lms.resource
 
+import com.infobeans.lms.dto.ApiError
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.tags.Tag
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+
 import com.infobeans.lms.dto.CreateUserRequest
 import com.infobeans.lms.dto.PagedResponse
 import com.infobeans.lms.dto.UpdateUserRequest
 import com.infobeans.lms.dto.UserAdminResponse
 import com.infobeans.lms.service.impl.UserAdminService
 import org.slf4j.LoggerFactory
+import org.springdoc.core.annotations.ParameterObject
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -25,9 +36,14 @@ import org.springframework.web.bind.annotation.RestController
 /**
  * REST resource for administrative user management.
  */
+@Tag(
+    name = "Admin User Management",
+    description = "Administrative endpoints for managing users"
+)
 @RestController
 @RequestMapping("/api/v1/users")
 @PreAuthorize("hasRole('ADMIN')")
+@SecurityRequirement(name = "bearerAuth")
 class UserAdminResource(
     private val userAdminService: UserAdminService
 ) {
@@ -37,6 +53,26 @@ class UserAdminResource(
     /**
      * Creates a new user.
      */
+    @Operation(summary = "Create new user")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201",
+                description = "User created successfully",
+                content = [Content(schema = Schema(implementation = UserAdminResponse::class))]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Validation or business rule violation",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            ),
+            ApiResponse(
+                responseCode = "409",
+                description = "Duplicate email or conflict",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            )
+        ]
+    )
     @PostMapping
     fun createUser(
         @RequestBody request: CreateUserRequest
@@ -52,9 +88,26 @@ class UserAdminResource(
     /**
      * Returns paginated users.
      */
+    @Operation(summary = "Get paginated users")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Users fetched successfully",
+                content = [Content(schema = Schema(implementation = PagedResponse::class))]
+            ),
+            ApiResponse(
+                responseCode = "401",
+                description = "JWT expired or invalid",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            )
+        ]
+    )
     @GetMapping
     fun getUsers(
+        @Parameter(description = "Search keyword (name or email)", example = "john")
         @RequestParam(required = false) keyword: String?,
+        @ParameterObject
         @PageableDefault(size = 10, sort = ["createdAt"], direction = Sort.Direction.DESC)
         pageable: Pageable
     ): ResponseEntity<PagedResponse<UserAdminResponse>> {
@@ -69,8 +122,24 @@ class UserAdminResource(
     /**
      * Returns user by ID.
      */
+    @Operation(summary = "Get user by ID")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "User fetched successfully",
+                content = [Content(schema = Schema(implementation = UserAdminResponse::class))]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "User not found",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            )
+        ]
+    )
     @GetMapping("/{id}")
     fun getUserById(
+        @Parameter(description = "User ID", example = "10")
         @PathVariable id: Long
     ): ResponseEntity<UserAdminResponse> {
 
@@ -82,8 +151,29 @@ class UserAdminResource(
     /**
      * Updates user.
      */
+    @Operation(summary = "Update user")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "User updated successfully",
+                content = [Content(schema = Schema(implementation = UserAdminResponse::class))]
+            ),
+            ApiResponse(
+                responseCode = "404",
+                description = "User not found",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid update request",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            )
+        ]
+    )
     @PutMapping("/{id}")
     fun updateUser(
+        @Parameter(description = "User ID", example = "10")
         @PathVariable id: Long,
         @RequestBody request: UpdateUserRequest
     ): ResponseEntity<UserAdminResponse> {
@@ -96,8 +186,20 @@ class UserAdminResource(
     /**
      * Deletes user.
      */
+    @Operation(summary = "Delete user")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            ApiResponse(
+                responseCode = "404",
+                description = "User not found",
+                content = [Content(schema = Schema(implementation = ApiError::class))]
+            )
+        ]
+    )
     @DeleteMapping("/{id}")
     fun deleteUser(
+        @Parameter(description = "User ID", example = "10")
         @PathVariable id: Long
     ): ResponseEntity<Void> {
 
