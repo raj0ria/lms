@@ -19,4 +19,12 @@ interface StudentEnrollmentStatusRepository : JpaRepository<StudentEnrollmentSta
         moduleId: Long,
         userId: Long
     ): ModuleStatusProjection?
+
+
+//    fun findByStudentIdAndModuleId(
+//        studentId: Long,
+//        moduleId: Long
+//    ): StudentEnrollmentStatus?
+
+    fun findByEnrollmentId(enrollmentId: Long): List<StudentEnrollmentStatus>
 }

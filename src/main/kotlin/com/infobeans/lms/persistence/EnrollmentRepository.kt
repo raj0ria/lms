@@ -84,5 +84,6 @@ interface EnrollmentRepository: JpaRepository<Enrollment, Long> {
     ): List<CourseEnrollmentUserProjection>
 
 
+    fun findByUser_IdAndCourse_Id(userId: Long, courseId: Long): Enrollment?
 
 }

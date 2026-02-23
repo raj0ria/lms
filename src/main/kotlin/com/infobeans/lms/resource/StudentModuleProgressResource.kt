@@ -1,9 +1,13 @@
 package com.infobeans.lms.resource
 
+import com.infobeans.lms.dto.StudentModuleProgressResponse
 import com.infobeans.lms.dto.UpdateModuleProgressRequest
+import com.infobeans.lms.persistence.UserRepository
 import com.infobeans.lms.service.impl.ModuleProgressService
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,4 +37,5 @@ class StudentModuleProgressResource(
 
         return ResponseEntity.noContent().build()
     }
+
 }

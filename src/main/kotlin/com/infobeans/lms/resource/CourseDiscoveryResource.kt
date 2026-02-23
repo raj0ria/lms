@@ -2,7 +2,10 @@ package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.CourseDetailResponse
 import com.infobeans.lms.dto.CourseSearchResponse
+import com.infobeans.lms.dto.ModuleResponse
 import com.infobeans.lms.dto.PagedResponse
+import com.infobeans.lms.exceptions.ResourceNotFoundException
+import com.infobeans.lms.persistence.CourseRepository
 import com.infobeans.lms.service.impl.CourseDiscoveryService
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
@@ -22,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/courses")
 class CourseDiscoveryResource(
-    private val discoveryService: CourseDiscoveryService
+    private val discoveryService: CourseDiscoveryService,
+    private val courseRepository: CourseRepository
 ) {
 
     private val log = LoggerFactory.getLogger(CourseDiscoveryResource::class.java)
@@ -63,5 +67,16 @@ class CourseDiscoveryResource(
         return ResponseEntity.ok(
             discoveryService.getCourseDetail(courseId)
         )
+    }
+
+
+    @GetMapping("/{courseId}/modules")
+    @PreAuthorize("hasAnyRole('STUDENT')")
+    fun getModulesForCourse(@PathVariable courseId: Long): List<ModuleResponse> {
+        val course = courseRepository.findById(courseId)
+            .orElseThrow { ResourceNotFoundException("Course not found with id $courseId") }
+
+        // fetch modules from service
+        return discoveryService.getModulesByCourse(course.id)
     }
 }

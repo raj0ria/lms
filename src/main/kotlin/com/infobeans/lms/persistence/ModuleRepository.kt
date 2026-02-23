@@ -44,5 +44,6 @@ interface ModuleRepository: JpaRepository<Module, Long> {
 """)
     fun findModulesByCourseId(courseId: Long): List<CourseModuleProjection>
 
+    fun findByCourseId(courseId: Long): List<Module>
 
 }

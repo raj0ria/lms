@@ -1,10 +1,15 @@
 package com.infobeans.lms.service.impl
 
+import com.infobeans.lms.dto.ModuleProgressResponse
+import com.infobeans.lms.dto.StudentModuleProgressResponse
 import com.infobeans.lms.dto.UpdateModuleProgressRequest
+import com.infobeans.lms.enums.EnrollmentStatus
 import com.infobeans.lms.enums.Role
 import com.infobeans.lms.exceptions.BusinessRuleViolationException
 import com.infobeans.lms.exceptions.ResourceNotFoundException
 import com.infobeans.lms.model.StudentEnrollmentStatus
+import com.infobeans.lms.persistence.EnrollmentRepository
+import com.infobeans.lms.persistence.ModuleRepository
 import com.infobeans.lms.persistence.StudentEnrollmentStatusRepository
 import com.infobeans.lms.persistence.UserRepository
 import jakarta.persistence.EntityManager
@@ -21,7 +26,9 @@ import org.springframework.stereotype.Service
 class ModuleProgressService(
     private val statusRepository: StudentEnrollmentStatusRepository,
     private val userRepository: UserRepository,
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
+    private val enrollmentRepository: EnrollmentRepository,
+    private val moduleRepository: ModuleRepository,
 ) {
 
     private val log = LoggerFactory.getLogger(ModuleProgressService::class.java)
@@ -70,4 +77,50 @@ class ModuleProgressService(
             request.status
         )
     }
+
+    fun getModulesWithProgress(courseId: Long, studentId: Long)
+            : List<StudentModuleProgressResponse> {
+
+        val enrollment = enrollmentRepository
+            .findByUser_IdAndCourse_Id(studentId, courseId)
+            ?: throw RuntimeException("Student not enrolled in this course")
+
+        val modules = moduleRepository.findByCourseId(courseId)
+
+        val statusList = statusRepository.findByEnrollmentId(enrollment.id)
+
+        val statusMap = statusList.associateBy { it.module.id }
+
+        return modules.map { module ->
+            val status = statusMap[module.id]?.status
+                ?: EnrollmentStatus.NOT_STARTED
+
+            StudentModuleProgressResponse(
+                moduleId = module.id,
+                name = module.name,
+                materialUrl = module.materialUrl,
+                status = status
+            )
+        }
+    }
+
+
+//    fun getProgress(moduleId: Long): ModuleProgressResponse {
+//
+////        val student = authService.getLoggedInUser()  // however you get current user
+//        val email = SecurityContextHolder.getContext()
+//            .authentication.name
+//
+//        val student = userRepository.findByEmail(email)
+//            ?: throw ResourceNotFoundException("User not found")
+//
+//        val enrollmentStatus = statusRepository
+//            .findByStudentIdAndModuleId(student.id!!, moduleId)
+//            ?: throw RuntimeException("Progress not found")
+//
+//        return ModuleProgressResponse(
+//            moduleId = moduleId,
+//            status = enrollmentStatus.status.name
+//        )
+//    }
 }

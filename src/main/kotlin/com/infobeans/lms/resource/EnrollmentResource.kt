@@ -1,12 +1,17 @@
 package com.infobeans.lms.resource
 
 import com.infobeans.lms.dto.EnrollmentResponse
+import com.infobeans.lms.dto.StudentModuleProgressResponse
+import com.infobeans.lms.persistence.UserRepository
 import com.infobeans.lms.service.impl.EnrollmentService
+import com.infobeans.lms.service.impl.ModuleProgressService
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -30,7 +35,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/courses")
 class EnrollmentResource(
-    private val enrollmentService: EnrollmentService
+    private val enrollmentService: EnrollmentService,
+    private val userRepository: UserRepository,
+    private val moduleProgressService: ModuleProgressService
 ) {
 
     private val log = LoggerFactory.getLogger(EnrollmentResource::class.java)
@@ -82,4 +89,21 @@ class EnrollmentResource(
         return ResponseEntity.noContent().build()
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/{courseId}/modules/progress")
+    fun getModulesWithProgress(
+        @PathVariable courseId: Long,
+        authentication: Authentication
+    ): ResponseEntity<List<StudentModuleProgressResponse>> {
+
+        val username = authentication.name
+
+        val user = userRepository.findByEmail(username)
+            ?: throw RuntimeException("User not found")
+
+        val response = moduleProgressService
+            .getModulesWithProgress(courseId, user.id)
+
+        return ResponseEntity.ok(response)
+    }
 }

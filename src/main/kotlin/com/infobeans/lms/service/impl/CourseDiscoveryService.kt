@@ -13,6 +13,7 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 /**
  * Service responsible for course discovery operations.
@@ -158,6 +159,21 @@ class CourseDiscoveryService(
             createdAt = course.createdAt,
             updatedAt = course.updatedAt
         )
+    }
+
+
+    @Transactional(readOnly = true)
+    fun getModulesByCourse(courseId: Long): List<ModuleResponse> {
+        return moduleRepository.findByCourseId(courseId).map { module ->
+            ModuleResponse(
+                id = module.id,
+                name = module.name,
+                materialUrl = module.materialUrl,
+                courseId = module.course.id,      // reference to parent course
+                createdAt = module.createdAt ?: Instant.now(),
+                updatedAt = module.updatedAt ?: Instant.now()
+            )
+        }
     }
 
 }
